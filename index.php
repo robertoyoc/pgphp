@@ -11,15 +11,7 @@ Con Mysql:<br>
 	<input type="text" placeholder="Dinero" id="i_dinero">
 	<input type="submit" value="Insertar">
 </form>
-Con postgres <br>
-<form id="insertpg">
-	<input type="text" placeholder="Nombre" id="pg_nombre">
-	<input type="text" placeholder="Dinero" id="pg_dinero">
-	<input type="submit" value="Insertar">
-</form>
-
 <br>
-
 <?php
 
 require ('select.php');
@@ -29,6 +21,25 @@ require ('select.php');
 
 <button id="act" onclick="request();">Actualiza</button>
 <button id="act2" onclick="deletee();">Borrar</button>
+
+<br><br>
+Con postgres <br>
+<form id="insertpg">
+	<input type="text" placeholder="Nombre" id="pg_nombre">
+	<input type="text" placeholder="Dinero" id="pg_dinero">
+	<input type="submit" value="Insertar">
+</form>
+<br>
+<?php
+
+require ('pg_select.php');
+?>
+<input type="text" id="pg_dinero2"/>
+<button id="pg_act" onclick="pg_request();">Actualiza</button>
+<button id="pg_act2" onclick="pg_deletee();">Borrar</button>
+<br>
+
+
 <div id="demo"></div>
 </body>
 </html>
@@ -67,8 +78,9 @@ var xhttp = new XMLHttpRequest();
 
 		xhttp.onreadystatechange = function() {
 	        if (this.readyState == 4 && this.status == 200) {
-	            document.getElementById("demo").innerHTML =
-	            this.responseText;
+	            if(confirm(this.responseText)){
+	        		
+	        	}
 	            location.reload(true);
 	       }
 	    };
@@ -122,6 +134,50 @@ var xhttp = new XMLHttpRequest();
 		xhttp.open("GET", url, true);
 		xhttp.send();
 	};
+
+	function pg_request(){
+
+		var seleccion = document.getElementById('pg_seleccion');
+		var id = seleccion.value;
+
+		var texto = document.getElementById('pg_dinero2');
+		var dinero = texto.value;
+
+		var url = "pg_update.php";
+		
+		url = url + "?id="+id+"&dinero="+dinero;
+
+		xhttp.onreadystatechange = function() {
+	        if (this.readyState == 4 && this.status == 200) {
+	            document.getElementById("demo").innerHTML =
+	            this.responseText;
+	       }
+	    };
+		xhttp.open("GET", url, true);
+		xhttp.send();
+	}
+	function pg_deletee(){
+		var seleccion = document.getElementById('pg_seleccion');
+		var id = seleccion.value;
+
+		var url = "pg_delete.php";
+		
+		url = url + "?id="+id;
+
+		xhttp.onreadystatechange = function() {
+	        if (this.readyState == 4 && this.status == 200) {
+
+	        	if(confirm(this.responseText)){
+
+	        	}
+	            location.reload(true);
+	       }
+	    };
+
+		xhttp.open("GET", url, true);
+		xhttp.send();
+
+	}
 
 	
 
